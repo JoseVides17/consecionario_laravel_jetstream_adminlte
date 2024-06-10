@@ -1,12 +1,12 @@
 <x-guest-layout>
     <x-authentication-card>
         <x-slot name="logo">
-            <x-authentication-card-logo />
+            <img src="{{ asset('assets/images/AdminLTELogo.png') }}" class="w-20 h-20" alt="Logo">
         </x-slot>
 
         <x-validation-errors class="mb-4" />
 
-        <form method="POST" action="{{ route('register') }}">
+        <form method="POST" action="{{ route('users.store') }}">
             @csrf
 
             <div>
@@ -17,6 +17,17 @@
             <div class="mt-4">
                 <x-label for="email" value="{{ __('Email') }}" />
                 <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
+            </div>
+
+            <div class="mt-4">
+                <x-label for="rol_id" value="{{ __('Rol') }}" />
+                <select id="rol_id" name="rol_id" class="block mt-1 w-full form-control">
+                    @foreach($roles as $role)
+                        <option value="{{ $role->id }}">
+                            {{ $role->nombre }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="mt-4">
