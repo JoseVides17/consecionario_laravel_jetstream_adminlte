@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
@@ -65,5 +67,22 @@ class User extends Authenticatable
     public function rol()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function adminlte_image()
+    {
+        return 'https://picsum.photos/300/300';
+    }
+
+    public function adminlte_desc()
+    {
+        $id = Auth::user()->getAuthIdentifier();
+        $user = User::with('rol')->find($id);
+        return $user->rol->descripcion;
+    }
+
+    public function adminlte_profile_url()
+    {
+
     }
 }

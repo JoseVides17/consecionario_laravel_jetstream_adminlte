@@ -7,7 +7,7 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="card card-secondary" style="margin-top: 10px">
+        <div class="card card-primary" style="margin-top: 10px">
             <div class="card-header">
                 <h3 class="card-title">Buscar Usuarios</h3>
             </div>
@@ -30,16 +30,18 @@
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6 col-lg-3">
-                            <button type="submit" id="btn_buscar" class="btn btn-primary btn-md mb-1" data-url="{{ route('users.index') }}">Buscar</button>
+                            <button type="submit" id="btn_buscar" class="btn btn-primary btn-md mb-1" data-url="{{ route('users.index') }}"><i class="fas fa-search"></i></button>
                             <a href="{{ route('users.index') }}" class="btn btn-secondary btn-md mb-1">Resetear</a>
-                            <a href="{{ route('users.create') }}" class="btn btn-success btn-md mb-1">Nuevo</a>
+                            @if(\Illuminate\Support\Facades\Auth::user()->rol->nombre == 'Administrador')
+                                <a href="{{ route('users.create') }}" class="btn btn-success btn-md mb-1"><i class="fas fa-plus"></i></a>
+                            @endif
                         </div>
                     </div>
                 </form>
             </div>
         </div>
 
-        <div class="card card-secondary mt-4">
+        <div class="card card-primary mt-4">
             <div class="card-header">
                 <h3 class="card-title">Lista de Usuarios</h3>
             </div>
@@ -53,7 +55,7 @@
                         <th>Roles</th>
                         <th>Creado</th>
                         <th>Actualizado</th>
-                        <th>Acciones</th>
+                        <th>Opciones</th>
                     </tr>
                     </thead>
                     <tbody id="userTableBody">
@@ -66,13 +68,15 @@
                             <td>{{ $user->created_at }}</td>
                             <td>{{ $user->updated_at }}</td>
                             <td>
-                                <a href="{{ route('users.show', $user->id) }}" class="btn btn-info btn-sm">Ver</a>
-                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                                <a href="{{ route('users.show', $user->id) }}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                                @if(\Illuminate\Support\Facades\Auth::user()->rol->nombre == 'Administrador')
+                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
                                 <form id="frmData" action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
                                 </form>
+                                @endif
                             </td>
                         </tr>
                     @endforeach
@@ -80,16 +84,69 @@
                 </table>
             </div>
             <div class="card-footer clearfix">
-                {{ $users->links() }}
+
             </div>
         </div>
     </div>
-
 @stop
 
 @section('css')
 @stop
 
 @section('js')
-    <script src="{{ @asset('/assets/js/filtro.js') }}"></script>
+    @if(session('user_reg'))
+        <script>
+            Swal.fire("Usuario Registrado");
+        </script>
+    @endif
+    @if(session('delete'))
+        <script>
+            Swal.fire("Usuario Eliminado");
+        </script>
+    @endif
+        <script>
+            @if(Auth::user()->rol->nombre == 'Administrador')
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('#frmData').forEach(function(form) {
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault();
+
+                        const swalWithBootstrapButtons = Swal.mixin({
+                            customClass: {
+                                confirmButton: "btn btn-success",
+                                cancelButton: "btn btn-danger"
+                            },
+                            buttonsStyling: false
+                        });
+
+                        swalWithBootstrapButtons.fire({
+                            title: "¿Estás seguro?",
+                            text: "¡No podrás revertir esto!",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonText: "Sí, eliminar!",
+                            cancelButtonText: "No, cancelar!",
+                            reverseButtons: true
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                swalWithBootstrapButtons.fire({
+                                    title: "Eliminado",
+                                    text: "El usuario ha sido eliminado.",
+                                    icon: "success"
+                                }).then(() => {
+                                    form.submit();
+                                });
+                            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                swalWithBootstrapButtons.fire({
+                                    title: "Cancelado",
+                                    text: "El usuario está a salvo :)",
+                                    icon: "error"
+                                });
+                            }
+                        });
+                    });
+                });
+            });
+            @endif
+        </script>
 @stop

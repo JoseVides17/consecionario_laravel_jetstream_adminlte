@@ -34,7 +34,7 @@ class UserController extends Controller
             $query->where('created_at', 'like', '%' . $fecha . '%');
         }
 
-        $users = $query->orderBy('rol_id')->paginate(5)->withQueryString();
+        $users = $query->orderBy('rol_id')->paginate(10)->withQueryString();
 
         return view('user.index', compact('users', 'name', 'email', 'fecha'));
     }
@@ -60,7 +60,7 @@ class UserController extends Controller
         $user->password = bcrypt($data['password']);
         $user->rol_id = $data['rol_id'];
         $user->save();
-        return redirect()->route('users.index')->with('success', 'Usuario creado correctamente!');
+        return redirect()->route('users.index')->with('user_reg', 'Usuario creado correctamente!');
     }
 
     /**
@@ -114,7 +114,7 @@ class UserController extends Controller
 
         if ($user != null){
             $user->delete();
-            return redirect()->route('users.index')->with('success', 'Usuario eliminado correctamente!');
+            return redirect()->route('users.index')->with('delete', 'Usuario eliminado correctamente!');
         }
         else
             return redirect()->route('users.index')->with('error', 'No tienes permiso para eliminar este usuario!.');

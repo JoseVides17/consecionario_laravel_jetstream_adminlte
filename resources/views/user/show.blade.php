@@ -27,13 +27,15 @@
                     </div>
                 </div>
                 <div class="mt-3">
-                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning mr-2">Editar</a>
+                    @if(\Illuminate\Support\Facades\Auth::user()->rol->nombre == 'Administrador')
+                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning mr-2"><i class="fas fa-edit"></i></a>
                         <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline-block;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger mr-2">Eliminar</button>
+                            <button type="submit" class="btn btn-danger mr-2"><i class="fas fa-trash-alt"></i></button>
                         </form>
-                    <a href="{{ route('users.index') }}" class="btn btn-primary">Volver a la lista</a>
+                    @endif
+                    <a href="{{ route('users.index') }}" class="btn btn-primary">Volver</a>
                 </div>
             </div>
         </div>
