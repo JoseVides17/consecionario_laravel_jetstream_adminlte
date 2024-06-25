@@ -7,6 +7,7 @@ use App\Models\Cliente;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class ClienteController extends Controller
 {
@@ -72,10 +73,10 @@ class ClienteController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = $request->validated();
-        $user = User::findOrFail($id);
+        $data = $request->validate($this->validar());
+        $user = Cliente::findOrFail($id);
         $user->update($data);
-        return session('cliente_act', 'El registro se actualizo correctamente.');
+        return redirect()->route('clientes.index')->with('cliente_update', 'El registro se actualizo correctamente.');
     }
 
     /**
@@ -83,12 +84,23 @@ class ClienteController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = User::findOrFail($id);
+        $user = Cliente::findOrFail($id);
         $user->delete();
-        return session('cliente_del', 'El registro se elimino correctamente.');
+        return redirect()->route('clientes.index');
     }
     protected function getInput(Request $request, $key, $default = null)
     {
         return $request->input($key, $default);
+    }
+
+    protected function validar(){
+        return [
+            'nombre' => 'required',
+            'apellido' => 'required',
+            'dni' => 'required',
+            'email' => 'required',
+            'telefono' => 'required',
+            'direccion' => 'required',
+        ];
     }
 }
