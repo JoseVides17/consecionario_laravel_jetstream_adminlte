@@ -63,8 +63,8 @@ class ClienteController extends Controller
      */
     public function show(string $id)
     {
-        $user = User::findOrFail($id);
-        return view('clientes.show', compact('user'));
+        $cliente = Cliente::findOrFail($id);
+        return view('clientes.show', compact('cliente'));
     }
 
     /**

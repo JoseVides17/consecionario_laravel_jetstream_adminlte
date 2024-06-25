@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\ProveedorController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -32,22 +34,22 @@ Route::middleware([
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
 
     //Rutas de clientes
-    Route::get('/clientes', [\App\Http\Controllers\ClienteController::class, 'index'])->name('clientes.index');
-    Route::get('/clientes/{cliente}', [\App\Http\Controllers\ClienteController::class, 'show'])->name('clientes.show');
-    Route::post('/clientes', [\App\Http\Controllers\ClienteController::class, 'store'])->name('clientes.store');
-    Route::put('/clientes/{cliente}', [\App\Http\Controllers\ClienteController::class, 'update'])->name('clientes.update');
-    Route::delete('/clientes/{cliente}', [\App\Http\Controllers\ClienteController::class, 'destroy'])->name('clientes.destroy');
-    Route::get('/clientes/{cliente}/edit', [\App\Http\Controllers\ClienteController::class, 'edit'])->name('clientes.edit');
-    Route::get('/clientes/create', [\App\Http\Controllers\ClienteController::class, 'create'])->name('clientes.create');
+    Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes.index');
+    Route::get('/clientes/{cliente}', [ClienteController::class, 'show'])->name('clientes.show');
+    Route::post('/clientes', [ClienteController::class, 'store'])->name('clientes.store');
+    Route::put('/clientes/{cliente}', [ClienteController::class, 'update'])->name('clientes.update');
+    Route::delete('/clientes/{cliente}', [ClienteController::class, 'destroy'])->name('clientes.destroy');
+    Route::get('/clientes/{cliente}/edit', [ClienteController::class, 'edit'])->name('clientes.edit');
+    Route::get('/clientes/create', [ClienteController::class, 'create'])->name('clientes.create');
 
     //Rutas de proveedores
-    Route::get('/proveedores', [\App\Http\Controllers\ProveedorController::class, 'index'])->name('proveedores.index');
-    Route::get('/proveedores/create', [\App\Http\Controllers\ProveedorController::class, 'create'])->name('proveedores.create');
-    Route::post('/proveedores', [\App\Http\Controllers\ProveedorController::class, 'store'])->name('proveedores.store');
-    Route::get('/proveedores/{proveedor}', [\App\Http\Controllers\ProveedorController::class, 'show'])->name('proveedores.show');
-    Route::put('/proveedores/{proveedor}', [\App\Http\Controllers\ProveedorController::class, 'update'])->name('proveedores.update');
-    Route::delete('/proveddores/{proveedor}', [\App\Http\Controllers\ProveedorController::class, 'destroy'])->name('proveedores.destroy');
-    Route::get('/proveedores/{proveedor}/edit', [\App\Http\Controllers\ProveedorController::class, 'edit'])->name('proveedores.edit');
+    Route::get('/proveedores', [ProveedorController::class, 'index'])->name('proveedores.index');
+    Route::get('/proveedores/create', [ProveedorController::class, 'create'])->name('proveedores.create');
+    Route::post('/proveedores', [ProveedorController::class, 'store'])->name('proveedores.store');
+    Route::get('/proveedores/{proveedor}', [ProveedorController::class, 'show'])->name('proveedores.show');
+    Route::put('/proveedores/{proveedor}', [ProveedorController::class, 'update'])->name('proveedores.update');
+    Route::delete('/proveddores/{proveedor}', [ProveedorController::class, 'destroy'])->name('proveedores.destroy');
+    Route::get('/proveedores/{proveedor}/edit', [ProveedorController::class, 'edit'])->name('proveedores.edit');
 });
 
 Route::get('/vehiculos', [\App\Http\Controllers\VehiculoController::class, 'index'])->name('vehiculos.index');
